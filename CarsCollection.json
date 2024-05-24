@@ -1,0 +1,112 @@
+[
+    {
+        "picture": "https://upload.wikimedia.org/wikipedia/commons/3/3a/2007-Toyota_Camry.JPG",
+        "name": "Camry",
+        "company": "Toyota",
+        "location": "Los Angeles, CA",
+        "resale_price": 15000,
+        "original_price": 25000,
+        "years_of_use": 3,
+        "posted_time": "2024-05-01T10:00:00Z",
+        "seller_name": "John Doe"
+    },
+    {
+        "picture": "https://upload.wikimedia.org/wikipedia/commons/9/9e/2014_Toyota_Corolla_%28ZRE172R%29_Ascent_sedan_%282014-04-11%29.jpg",
+        "name": "Corolla",
+        "company": "Toyota",
+        "location": "San Francisco, CA",
+        "resale_price": 12000,
+        "original_price": 22000,
+        "years_of_use": 5,
+        "posted_time": "2024-05-20T08:00:00Z",
+        "seller_name": "Sarah Wilson"
+    },
+    {
+        "picture": "",
+        "name": "C-Class",
+        "company": "https://www.thecarexpert.co.uk/wp-content/uploads/2021/12/Mercedes-Benz-C-Class-1600x1200-cropped.jpg",
+        "location": "New York, NY",
+        "resale_price": 30000,
+        "original_price": 45000,
+        "years_of_use": 2,
+        "posted_time": "2024-04-15T14:30:00Z",
+        "seller_name": "Jane Smith"
+    },
+    {
+        "picture": "https://images.news18.com/ibnlive/uploads/2021/03/1616393172_2021-mercedes-benz-e-class-facelift_19.png?im=FitAndFill=(1200,675)",
+        "name": "E-Class",
+        "company": "Mercedes-Benz",
+        "location": "Boston, MA",
+        "resale_price": 35000,
+        "original_price": 50000,
+        "years_of_use": 3,
+        "posted_time": "2024-05-10T13:00:00Z",
+        "seller_name": "David Green"
+    },
+    {
+        "picture": "https://carwow-uk-wp-3.imgix.net/Huracan-replacement-lead-2.png?auto=format&cs=tinysrgb&fit=crop&h=800&ixlib=rb-1.1.0&q=60&w=1600",
+        "name": "Huracan",
+        "company": "Lamborghini",
+        "location": "Miami, FL",
+        "resale_price": 200000,
+        "original_price": 300000,
+        "years_of_use": 1,
+        "posted_time": "2024-03-20T09:15:00Z",
+        "seller_name": "Mike Johnson"
+    },
+    {
+        "picture": "https://hips.hearstapps.com/hmg-prod/amv-prod-cad-assets/images/16q2/667349/2016-lamborghini-aventador-lp750-4-superveloce-test-review-car-and-driver-photo-667354-s-original.jpg?fill=4:3&resize=1200:*",
+        "name": "Aventador",
+        "company": "Lamborghini",
+        "location": "Las Vegas, NV",
+        "resale_price": 400000,
+        "original_price": 500000,
+        "years_of_use": 2,
+        "posted_time": "2024-04-01T10:45:00Z",
+        "seller_name": "Anna Lee"
+    },
+    {
+        "picture": "https://cdn.motor1.com/images/mgl/qA41G/s1/4x3/ford-mustang-shelby-gt500-code-orange-front-low.webp",
+        "name": "Mustang",
+        "company": "Ford",
+        "location": "Dallas, TX",
+        "resale_price": 25000,
+        "original_price": 35000,
+        "years_of_use": 4,
+        "posted_time": "2024-02-10T11:00:00Z",
+        "seller_name": "Emily Davis"
+    },
+    {
+        "picture": "https://news.dupontregistry.com/wp-content/uploads/2022/05/download-2023-09-14T145604.196-scaled.jpeg",
+        "name": "F-150",
+        "company": "Ford",
+        "location": "Houston, TX",
+        "resale_price": 30000,
+        "original_price": 40000,
+        "years_of_use": 3,
+        "posted_time": "2024-03-25T12:30:00Z",
+        "seller_name": "William Harris"
+    },
+    {
+        "picture": "https://images.carexpert.com.au/resize/3000/-/app/uploads/2021/04/14Mazda-CX-5-Akera594.jpg",
+        "name": "CX-5",
+        "company": "Mazda",
+        "location": "Chicago, IL",
+        "resale_price": 18000,
+        "original_price": 27000,
+        "years_of_use": 3,
+        "posted_time": "2024-01-25T16:45:00Z",
+        "seller_name": "Robert Brown"
+    },
+    {
+        "picture": "https://www.mazdausa.com/siteassets/vehicles/2024/mazda3-sedan/build-and-price/trims/ext.-360s/2.5/white/e360-my22-mazda3-sedan-fwd-2-5s-snowflakewhitepearl-023.jpg",
+        "name": "Mazda3",
+        "company": "Mazda",
+        "location": "Phoenix, AZ",
+        "resale_price": 15000,
+        "original_price": 22000,
+        "years_of_use": 4,
+        "posted_time": "2024-04-05T09:30:00Z",
+        "seller_name": "Laura Martinez"
+    }
+]
