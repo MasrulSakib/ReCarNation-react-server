@@ -21,6 +21,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const carsCollection = client.db('ReCarNation').collection('carsCollection')
+        const usersCollection = client.db('ReCarNation').collection('usersCollection')
 
         app.get('/cars/:company', async (req, res) => {
             company = req.params.company
@@ -28,6 +29,12 @@ async function run() {
             const cars = await carsCollection.find(query).toArray()
             res.send(cars);
 
+        })
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result)
         })
 
 
