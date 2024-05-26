@@ -22,6 +22,7 @@ async function run() {
     try {
         const carsCollection = client.db('ReCarNation').collection('carsCollection')
         const usersCollection = client.db('ReCarNation').collection('usersCollection')
+        const bookingsCollection = client.db('ReCarNation').collection('bookingsCollection')
 
         app.get('/cars/:company', async (req, res) => {
             company = req.params.company
@@ -31,11 +32,32 @@ async function run() {
 
         })
 
+        app.get('/users', async (req, res) => {
+            const query = {}
+            const users = await usersCollection.find(query).toArray()
+            res.send(users)
+        })
+
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
             res.send(result)
         })
+
+        app.post('/bookings', async (req, res) => {
+            const bookings = req.body;
+            const result = await bookingsCollection.insertOne(bookings);
+            res.send(result);
+        })
+
+        app.get('/bookings', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email }
+            const result = await bookingsCollection.find(query).toArray();
+            res.send(result);
+        })
+
+
 
 
     } finally {
