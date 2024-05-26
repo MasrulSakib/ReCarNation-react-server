@@ -25,7 +25,7 @@ async function run() {
         const bookingsCollection = client.db('ReCarNation').collection('bookingsCollection')
 
         app.get('/cars/:company', async (req, res) => {
-            company = req.params.company
+            const company = req.params.company
             const query = { company: company };
             const cars = await carsCollection.find(query).toArray()
             res.send(cars);
@@ -57,6 +57,12 @@ async function run() {
             res.send(result);
         })
 
+        app.get('/users', async (req, res) => {
+            const query = {}
+            const users = await usersCollection.find(query).toArray();
+            res.send(users);
+        })
+
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
@@ -69,6 +75,13 @@ async function run() {
             const query = { email: email }
             const user = await usersCollection.findOne(query)
             res.send({ isBuyer: user?.usertype === 'Buyer' });
+        })
+
+        app.get('/users/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email }
+            const user = await usersCollection.findOne(query)
+            res.send({ isAdmin: user?.usertype === 'Admin' });
         })
 
     } finally {
