@@ -57,11 +57,6 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/users', async (req, res) => {
-            const query = {}
-            const users = await usersCollection.find(query).toArray();
-            res.send(users);
-        })
 
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
@@ -83,6 +78,20 @@ async function run() {
             const user = await usersCollection.findOne(query)
             res.send({ isAdmin: user?.usertype === 'Admin' });
         })
+
+        app.get('/users/buyers', async (req, res) => {
+            try {
+
+                const query = { usertype: 'Buyer' };
+                const buyers = await usersCollection.find(query).toArray();
+                console.log('Buyers:', buyers);
+                res.send(buyers);
+            } catch (error) {
+                console.error('Error fetching buyers:', error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
+
 
     } finally {
 
