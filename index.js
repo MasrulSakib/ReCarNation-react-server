@@ -92,6 +92,19 @@ async function run() {
             }
         });
 
+        app.get('/users/sellers', async (req, res) => {
+            try {
+
+                const query = { usertype: 'Seller' };
+                const sellers = await usersCollection.find(query).toArray();
+                console.log('Sellers:', sellers);
+                res.send(sellers);
+            } catch (error) {
+                console.error('Error fetching sellers:', error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
+
 
     } finally {
 
