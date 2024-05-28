@@ -31,11 +31,24 @@ async function run() {
             res.send(cars);
         });
 
+        app.post('/cars', async (req, res) => {
+            const cars = req.body;
+            const result = await carsCollection.insertOne(cars);
+            res.send(result)
+        });
+
         app.post('/bookings', async (req, res) => {
             const bookings = req.body;
             const result = await bookingsCollection.insertOne(bookings);
             res.send(result);
         });
+
+        app.get('/dashboard/seller/myproducts', async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = await carsCollection.find(query).toArray();
+            res.send(result);
+        })
 
         app.get('/bookings', async (req, res) => {
             const email = req.query.email;
@@ -44,13 +57,19 @@ async function run() {
             res.send(result);
         });
 
-
         app.delete('/bookings/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) }
             const result = await bookingsCollection.deleteOne(query)
             res.send(result);
         });
+
+        app.delete('/dashboard/seller/myproducts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await carsCollection.deleteOne(query)
+            res.send(result);
+        })
 
         app.post('/users', async (req, res) => {
             const user = req.body;
@@ -69,7 +88,6 @@ async function run() {
             const email = req.params.email;
             const query = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
             const user = await usersCollection.findOne(query)
-            console.log({ isSeller: user?.usertype })
             res.send({ isSeller: user?.usertype === 'Seller' });
         });
 
@@ -77,7 +95,6 @@ async function run() {
             const email = req.params.email;
             const query = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
             const user = await usersCollection.findOne(query)
-            console.log({ isSeller: user?.usertype })
             res.send({ isAdmin: user?.usertype === 'Admin' });
         });
 
