@@ -29,33 +29,20 @@ async function run() {
             const query = { company: company };
             const cars = await carsCollection.find(query).toArray()
             res.send(cars);
-
-        })
-
-        app.get('/users', async (req, res) => {
-            const query = {}
-            const users = await usersCollection.find(query).toArray()
-            res.send(users)
-        })
-
-        app.post('/users', async (req, res) => {
-            const user = req.body;
-            const result = await usersCollection.insertOne(user);
-            res.send(result)
-        })
+        });
 
         app.post('/bookings', async (req, res) => {
             const bookings = req.body;
             const result = await bookingsCollection.insertOne(bookings);
             res.send(result);
-        })
+        });
 
         app.get('/bookings', async (req, res) => {
             const email = req.query.email;
             const query = { email: email }
             const result = await bookingsCollection.find(query).toArray();
             res.send(result);
-        })
+        });
 
 
         app.delete('/bookings/:id', async (req, res) => {
@@ -63,28 +50,54 @@ async function run() {
             const query = { _id: new ObjectId(id) }
             const result = await bookingsCollection.deleteOne(query)
             res.send(result);
-        })
+        });
+
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            const result = await usersCollection.insertOne(user);
+            res.send(result)
+        });
 
         app.get('/users/buyer/:email', async (req, res) => {
             const email = req.params.email;
-            const query = { email: email }
+            const query = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
             const user = await usersCollection.findOne(query)
             res.send({ isBuyer: user?.usertype === 'Buyer' });
-        })
+        });
+
+        app.get('/users/seller/:email', async (req, res) => {
+            const email = req.params.email;
+            const query = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
+            const user = await usersCollection.findOne(query)
+            console.log({ isSeller: user?.usertype })
+            res.send({ isSeller: user?.usertype === 'Seller' });
+        });
 
         app.get('/users/admin/:email', async (req, res) => {
             const email = req.params.email;
-            const query = { email: email }
+            const query = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
             const user = await usersCollection.findOne(query)
+            console.log({ isSeller: user?.usertype })
             res.send({ isAdmin: user?.usertype === 'Admin' });
-        })
+        });
+
+        app.get('/users', async (req, res) => {
+            try {
+                const query = { usertype: { $in: ["Buyer", "Seller"] } };
+                const users = await usersCollection.find(query).toArray();
+                res.send(users);
+            } catch (error) {
+                console.error('Error fetching users:', error);
+                res.status(500).send('Internal Server Error');
+            }
+        });
 
         app.get('/users/buyers', async (req, res) => {
             try {
 
                 const query = { usertype: 'Buyer' };
                 const buyers = await usersCollection.find(query).toArray();
-                console.log('Buyers:', buyers);
+                // console.log('Buyers:', buyers);
                 res.send(buyers);
             } catch (error) {
                 console.error('Error fetching buyers:', error);
@@ -97,12 +110,19 @@ async function run() {
 
                 const query = { usertype: 'Seller' };
                 const sellers = await usersCollection.find(query).toArray();
-                console.log('Sellers:', sellers);
+                // console.log('Sellers:', sellers);
                 res.send(sellers);
             } catch (error) {
                 console.error('Error fetching sellers:', error);
                 res.status(500).send('Internal Server Error');
             }
+        });
+
+        app.delete('/user/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const users = await usersCollection.deleteOne(query)
+            res.send(users);
         });
 
 
