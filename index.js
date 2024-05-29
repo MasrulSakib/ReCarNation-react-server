@@ -142,6 +142,31 @@ async function run() {
             res.send(users);
         });
 
+        app.get('/dashboard/reportedcars/post', async (req, res) => {
+            const query = { post: 'reported' }
+            const cars = await carsCollection.find(query).toArray()
+            res.send(cars)
+        })
+
+        app.delete('/dashboard/reportedcars/post/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const post = await carsCollection.deleteOne(query)
+            res.send(post);
+        })
+
+        app.put('/reportedcars/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const reportedCars = {
+                $set: {
+                    post: 'reported'
+                }
+            };
+            const result = await carsCollection.updateOne(filter, reportedCars, options);
+            res.send(result);
+        });
 
     } finally {
 
