@@ -46,6 +46,7 @@ async function run() {
         const usersCollection = client.db('ReCarNation').collection('usersCollection')
         const bookingsCollection = client.db('ReCarNation').collection('bookingsCollection')
         const paymentsCollection = client.db('ReCarNation').collection('payments')
+        const reviewsCollection = client.db('ReCarNation').collection('reviewsCollection')
 
         const verifyAdmin = async (req, res, next) => {
             const decodedEmail = req.decoded.email;
@@ -79,10 +80,10 @@ async function run() {
 
         app.get('/jwt', async (req, res) => {
             const email = req.query.email;
-            const query = { email: email };
+            const query = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
             const user = await usersCollection.findOne(query);
             if (user) {
-                const token = jwt.sign({ email }, process.env.JSON_TOKEN, { expiresIn: '1h' })
+                const token = jwt.sign({ email }, process.env.JSON_TOKEN, { expiresIn: '1d' })
                 return res.send({ accessToken: token });
             }
             res.status(403).send({ accessToken: '' })
@@ -109,10 +110,25 @@ async function run() {
 
         app.get('/dashboard/seller/myproducts', verifyJWT, verifySeller, async (req, res) => {
             const email = req.query.email;
-            const query = { email: email };
+            const query = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
             const result = await carsCollection.find(query).toArray();
             res.send(result);
         })
+
+        app.patch('/dashboard/seller/myproducts/advertise/:id', (req, res) => {
+            const id = req.params.id;
+            const { advertise } = req.body;
+            carsCollection.updateOne({ _id: new ObjectId(id) }, { $set: { advertise } })
+                .then(result => {
+                    res.send(result);
+                });
+        });
+
+        app.get('/dashboard/advertisedCars', async (req, res) => {
+            const query = { advertise: true }
+            const result = await carsCollection.find(query).toArray()
+            res.send(result)
+        });
 
         app.delete('/dashboard/seller/myproducts/:id', verifyJWT, verifySeller, async (req, res) => {
             const id = req.params.id;
@@ -213,10 +229,10 @@ async function run() {
             res.send(users);
         });
 
-        app.put('/users/status/:email', async (req, res) => {
+        app.put('/users/status/:email', verifyJWT, verifyAdmin, async (req, res) => {
             try {
                 const email = req.params.email;
-                const filter = { email: email };
+                const filter = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
                 const options = { upsert: true };
                 const updatedDoc = {
                     $set: {
@@ -290,6 +306,15 @@ async function run() {
             res.send({
                 clientSecret: paymentIntent.client_secret,
             });
+        });
+
+        app.get('/reviews', async (req, res) => {
+            try {
+                const reviews = await reviewsCollection.find().toArray();
+                res.send(reviews);
+            } catch (error) {
+                res.status(500).send({ message: 'An error occurred', error });
+            }
         });
 
     } finally {
