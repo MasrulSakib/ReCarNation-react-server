@@ -213,6 +213,25 @@ async function run() {
             res.send(users);
         });
 
+        app.put('/users/status/:email', async (req, res) => {
+            try {
+                const email = req.params.email;
+                const filter = { email: email };
+                const options = { upsert: true };
+                const updatedDoc = {
+                    $set: {
+                        status: 'verified'
+                    }
+                };
+                const carsResult = await carsCollection.updateOne(filter, updatedDoc, options);
+                const usersResult = await usersCollection.updateOne(filter, updatedDoc, options);
+
+                res.send({ carsResult, usersResult });
+            } catch (error) {
+                res.status(500).send({ message: 'An error occurred', error });
+            }
+        });
+
         app.get('/dashboard/reportedcars/post', verifyJWT, verifyAdmin, async (req, res) => {
             const query = { post: 'reported' }
             const cars = await carsCollection.find(query).toArray()
