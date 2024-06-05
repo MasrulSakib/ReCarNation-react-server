@@ -278,15 +278,19 @@ async function run() {
         app.post('/payments', async (req, res) => {
             const payment = req.body;
             const result = await paymentsCollection.insertOne(payment);
-            const id = payment.bookingId;
-            const filter = { _id: new ObjectId(id) };
+            const bookedId = payment.bookingId;
+            const carModel = payment.model;
+            const BookedFilter = { _id: new ObjectId(bookedId) };
+            const carsFilter = { model: carModel }
             const updatedDoc = {
                 $set: {
                     paid: true,
                     transactionId: payment.transactionId
                 }
             };
-            const updatedResult = await bookingsCollection.updateOne(filter, updatedDoc);
+            const updatedResult = await bookingsCollection.updateOne(BookedFilter, updatedDoc);
+            const carsResult = await carsCollection.updateOne(carsFilter, updatedDoc);
+
             res.send(result);
         });
 
