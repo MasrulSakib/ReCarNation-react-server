@@ -97,10 +97,29 @@ async function run() {
         });
 
         app.post('/cars', verifyJWT, verifySeller, async (req, res) => {
-            const cars = req.body;
-            const result = await carsCollection.insertOne(cars);
-            res.send(result)
+            try {
+                const carData = req.body;
+                const email = carData.email; // Assuming the car data includes the user's email
+
+                // Check if the user is verified in usersCollection
+                const user = await usersCollection.findOne({ email: { $regex: new RegExp(`^${email}$`, 'i') } });
+
+                // If the user is verified, set the status of the car to 'verified'
+                if (user && user.status === 'verified') {
+                    carData.status = 'verified';
+                } else {
+                    carData.status = 'unverified'; // Optionally set to 'unverified' if user is not verified
+                }
+
+                // Insert new car document
+                const result = await carsCollection.insertOne(carData);
+
+                res.send(result);
+            } catch (error) {
+                res.status(500).send({ message: 'An error occurred', error });
+            }
         });
+
 
         app.post('/bookings', async (req, res) => {
             const bookings = req.body;
@@ -233,20 +252,25 @@ async function run() {
             try {
                 const email = req.params.email;
                 const filter = { email: { $regex: new RegExp(`^${email}$`, 'i') } };
-                const options = { upsert: true };
                 const updatedDoc = {
                     $set: {
                         status: 'verified'
                     }
                 };
-                const carsResult = await carsCollection.updateOne(filter, updatedDoc, options);
-                const usersResult = await usersCollection.updateOne(filter, updatedDoc, options);
 
-                res.send({ carsResult, usersResult });
+                // Update the user's status in usersCollection
+                const usersResult = await usersCollection.updateOne(filter, updatedDoc);
+
+                // Update the user's status in carsCollection
+                const carsResult = await carsCollection.updateMany(filter, updatedDoc);
+
+                res.send({ usersResult, carsResult });
             } catch (error) {
                 res.status(500).send({ message: 'An error occurred', error });
             }
         });
+
+
 
         app.get('/dashboard/reportedcars/post', verifyJWT, verifyAdmin, async (req, res) => {
             const query = { post: 'reported' }
